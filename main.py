@@ -1,7 +1,7 @@
 
 months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
-text = "November of 21st"
+
 
 def getMonth(s):
     for item in s:
@@ -23,3 +23,9 @@ def getMonthAndDate(s):
 for i in getMonthAndDate(text.split()):
     print(i)
 
+
+def getMonthIndex(m):
+    return(months.index(m)+1)
+
+
+print(getMonthIndex('December'))
