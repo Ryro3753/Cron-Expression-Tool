@@ -46,12 +46,14 @@ def getMonthIndex(m):
 
 
 
-def ExtractWeekDay(dateList): --Done
+def ExtractWeekDay(dateList): ##Done
     datesContainsWeekDays = []
     for d in dateList:
         for w in weekDays:
             if w in d and d not in datesContainsWeekDays:
                 datesContainsWeekDays.append(d)
+    if not datesContainsWeekDays:
+        return '*'
     divided = divisor(datesContainsWeekDays)
     between = 0
     if 'between' in divided:
@@ -76,19 +78,21 @@ def ExtractHour(dateList):
     for d in dateList:
         if ':' in d and d not in datesContainsHour:
             datesContainsHour.append(d)
-        else if 'past' in d and d not in datesContainsHour:
+        elif 'past' in d and d not in datesContainsHour:
             datesContainsHour.append(d)
     
 
 def ExtractMin(dateList):
     x = 0
 
-def ExtractMonth(dateList): --Done
+def ExtractMonth(dateList): ##Done
     datesContainsMonts = []
     for d in dateList:
         for m in months:
             if m in d and d not in datesContainsMonts:
                 datesContainsMonts.append(d)
+    if not datesContainsMonts:
+        return '*'
     divided = divisor(datesContainsMonts)
     between = 0
     if 'between' in divided:
