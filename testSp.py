@@ -1,8 +1,8 @@
 import spacy
 nlp = spacy.load("en_core_web_sm")
 doc = nlp(u"Every even day at January and February between 10th and 20th at 5 past 10")
-doc2 = nlp(u"At 14:45 in January twenty second")
-doc3 = nlp(u"Every Sunday in May, By the way Holland")
+doc2 = nlp(u"Yeah yeah, January 16:45")
+doc3 = nlp(u"Every day, every 2 day, January eleventh")
 
 
 print("Noun phrases:", [chunk.text for chunk in doc.noun_chunks])

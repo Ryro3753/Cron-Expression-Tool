@@ -14,7 +14,7 @@ daysNumber = ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th
 
 weekDays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 
-past = ['quarter past', 'half past', 'quarter to']
+past = ['quarter past', 'half past']
 
 def getMonth(s):
     for item in s:
@@ -46,24 +46,92 @@ def getMonthIndex(m):
 
 
 
-def ExtractWeekDay(dateList):
-    day = []
-    for date in dateList:
-        if date in weekDays:
-            day.append(weekDays.index(date))
-    return day
+def ExtractWeekDay(dateList): --Done
+    datesContainsWeekDays = []
+    for d in dateList:
+        for w in weekDays:
+            if w in d and d not in datesContainsWeekDays:
+                datesContainsWeekDays.append(d)
+    divided = divisor(datesContainsWeekDays)
+    between = 0
+    if 'between' in divided:
+        between = 1
+    daysIndex = []
+    for d in divided:
+        if d in weekDays:
+            daysIndex.append(weekDays.index(d))
+    statement = ""
+    if len(daysIndex) == 2 and between == 1:
+        statement = str(min(daysIndex))+'-'+str(max(daysIndex))
+    else:
+        for s in daysIndex:
+            statement = statement + str(s) + ','
+        statement = statement[:-1]
+    return statement
+    
 
-def ExtractHour():
+
+def ExtractHour(dateList):
+    datesContainsHour = []
+    for d in dateList:
+        if ':' in d and d not in datesContainsHour:
+            datesContainsHour.append(d)
+        else if 'past' in d and d not in datesContainsHour:
+            datesContainsHour.append(d)
+    
+
+def ExtractMin(dateList):
     x = 0
 
-def ExtractMin():
+def ExtractMonth(dateList): --Done
+    datesContainsMonts = []
+    for d in dateList:
+        for m in months:
+            if m in d and d not in datesContainsMonts:
+                datesContainsMonts.append(d)
+    divided = divisor(datesContainsMonts)
+    between = 0
+    if 'between' in divided:
+        between = 1
+    montsIndex = []
+    for d in divided:
+        if d in months:
+            montsIndex.append(months.index(d)+1)
+    statement = ""
+    if len(montsIndex) == 2 and between == 1:
+        statement = str(min(montsIndex))+'-'+str(max(montsIndex))
+    else:
+        for s in montsIndex:
+            statement = statement + str(s) + ','
+        statement = statement[:-1]
+    return statement
+
+
+def ExtractDay(dateList):
     x = 0
 
-def ExtractMonth():
-    x = 0
 
-def ExtractDay():
-    x = 0
+def combiner(strList):
+    str = ''
+    for v in strList:
+        str = v + " "
+    return str
 
-tt = ['Sunday','Monday']
-print(ExtractWeekDay(tt))
+def divisor(strList):
+    divided = []
+    for v in strList:
+        for t in v.split():
+            divided.append(t)
+    return divided
+
+def colonDividerHour(str):
+    space = str.split()
+    hourPart = ""
+
+    for t in space:
+        if ':' in t:
+            temp = t.split(':')
+            hourPart = temp[0]
+
+tt = ['between January and May']
+print(ExtractMonth(tt))
