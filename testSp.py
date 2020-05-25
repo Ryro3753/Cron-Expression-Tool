@@ -1,7 +1,7 @@
 import spacy
 nlp = spacy.load("en_core_web_sm")
 doc = nlp(u"Every even day at January and February between 10th and 20th at 5 past 10")
-doc2 = nlp(u"Yeah yeah, January 16:45")
+doc2 = nlp(u"between 16:00 17:00")
 doc3 = nlp(u"Every day, every 2 day, January eleventh")
 
 
