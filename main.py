@@ -1,6 +1,7 @@
 import spacy
 
 nlp = spacy.load("en_core_web_sm")
+
 months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
 daysText = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 
@@ -15,6 +16,26 @@ daysNumber = ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th
 weekDays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 
 past = ['quarter past', 'half past']
+
+
+def main():
+    ##inp = inputCron()
+    inp = '8:11 at January thirteenth in  Friday and Sunday'
+    DateNTime = nlpDateTime(inp)
+    statement = statementCombiner(DateNTime)
+    print('Your CRON statement is: ' + statement)
+ 
+def inputCron():
+    inp = input('Please write your text statement:')
+    return inp
+
+def nlpDateTime(s):
+    doc = nlp(s)
+    DateNTime = []
+    for item in doc.ents:
+        if item.label_ == 'TIME' or item.label_ == 'DATE':
+            DateNTime.append(str(item))
+    return DateNTime
 
 def getMonth(s):
     for item in s:
@@ -196,5 +217,14 @@ def colonDividerMin(str):
             minPart = temp[1]
     return minPart
 
-tt = ['between January and May']
-print(ExtractMonth(tt))
+def statementCombiner(DateNTime):
+    min = ExtractMin(DateNTime)
+    hour = ExtractHour(DateNTime)
+    day = ExtractDay(DateNTime)
+    month = ExtractMonth(DateNTime)
+    weekDay = ExtractWeekDay(DateNTime)
+    combine = str(min) + ' ' + str(hour) + ' ' + str(day) + ' ' + str(month) + ' ' + str(weekDay)
+    return combine
+
+if __name__ == '__main__':
+    main()
