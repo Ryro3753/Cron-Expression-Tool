@@ -1,4 +1,5 @@
 import spacy
+import subprocess
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -15,16 +16,28 @@ daysNumber = ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th
 
 weekDays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 
-past = ['quarter past', 'half past']
+#past = ['quarter past', 'half past']
 
 
 def main():
-    ##inp = inputCron()
-    inp = '8:11 at January thirteenth in  Friday and Sunday'
+    inp = inputCron()
+    copy = 0
+    for item in inp.split():
+        if item == "-copy":
+            copy = 1
+            inp = inp[6:]
+    print(inp)
     DateNTime = nlpDateTime(inp)
     statement = statementCombiner(DateNTime)
+    if(copy == 1):
+        copyToClipBoard(statement)
     print('Your CRON statement is: ' + statement)
- 
+    
+
+def copyToClipBoard(s):
+    cmd = 'echo ' + s.strip() + '|clip'
+    return subprocess.check_call(cmd,shell=True)
+
 def inputCron():
     inp = input('Please write your text statement:')
     return inp
@@ -228,3 +241,5 @@ def statementCombiner(DateNTime):
 
 if __name__ == '__main__':
     main()
+
+## İki ay aralığı için uğraş

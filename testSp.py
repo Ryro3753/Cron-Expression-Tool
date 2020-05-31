@@ -2,7 +2,7 @@ import spacy
 nlp = spacy.load("en_core_web_sm")
 doc = nlp(u"")
 doc2 = nlp(u"16:45 at January thirteenth")
-doc3 = nlp(u"Every day, every 2 day, January eleventh")
+doc3 = nlp(u"Meet me in France, Especially at Hospital")
 
 
 print("Noun phrases:", [chunk.text for chunk in doc.noun_chunks])
