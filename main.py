@@ -3,7 +3,7 @@ import subprocess
 
 nlp = spacy.load("en_core_web_sm")
 
-months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
 
 daysText = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 
 'seventh', 'eighth', 'ninth','tenth','eleventh','twelfth','thirteenth',
@@ -14,21 +14,24 @@ daysText = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth',
 daysNumber = ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th','13th','14th','15th',
 '16th','17th','18th','19th','20th','21st','22nd','23rd','24th','25th','26th','27th','28th','29th','30th','31st']
 
-weekDays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+weekDays = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday']
 
 #past = ['quarter past', 'half past']
 
 
 def main():
     inp = inputCron()
+    inp = inp.lower()
     copy = 0
     for item in inp.split():
         if item == "-copy":
             copy = 1
             inp = inp[6:]
-    print(inp)
     DateNTime = nlpDateTime(inp)
     statement = statementCombiner(DateNTime)
+    if(isCronValid(statement) == 0):
+        print("Your statement is not valid")
+        return 0
     if(copy == 1):
         copyToClipBoard(statement)
     print('Your CRON statement is: ' + statement)
@@ -238,6 +241,50 @@ def statementCombiner(DateNTime):
     weekDay = ExtractWeekDay(DateNTime)
     combine = str(min) + ' ' + str(hour) + ' ' + str(day) + ' ' + str(month) + ' ' + str(weekDay)
     return combine
+
+def isCronValid(cron):
+    min = []
+    hour = []
+    day =[]
+    month = []
+    weekDay = []
+    cronSplit = cron.split()
+    if len(cronSplit) != 5:
+        return 0
+    for minHypen in cronSplit[0].split('-'):
+        for minComma in minHypen.split(','):
+            min.append(minComma) 
+    for hourHypen in cronSplit[0].split('-'):
+        for hourComma in hourHypen.split(','):
+            hour.append(hourComma)
+    for dayHypen in cronSplit[0].split('-'):
+        for dayComma in dayHypen.split(','):
+            day.append(dayComma)
+    for monthHypen in cronSplit[0].split('-'):
+        for monthComma in monthHypen.split(','):
+            month.append(monthComma)
+    for weekDayHypen in cronSplit[0].split('-'):
+        for weekDayComma in weekDayHypen.split(','):
+            weekDay.append(weekDayComma)
+
+    for m in min:
+        if m not in range(0,61) and m != "*":
+            return 0
+    for h in hour:
+        if h not in range(0,24) and h != "*":
+            return 0
+    for d in day:
+        if d not in range(1,32) and d != "*":
+            return 0
+    for m in month:
+        if m not in range(1,13) and m != "*":
+            return 0
+    for wD in weekDay:
+        if wD not in range(0,7) and wD != "*":
+            return 0
+    return 1
+
+
 
 if __name__ == '__main__':
     main()
