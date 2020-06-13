@@ -253,35 +253,44 @@ def isCronValid(cron):
         return 0
     for minHypen in cronSplit[0].split('-'):
         for minComma in minHypen.split(','):
-            min.append(minComma) 
+            if minComma != "*":
+                min.append(int(minComma)) 
+            else:
+                min.append("*")
     for hourHypen in cronSplit[0].split('-'):
         for hourComma in hourHypen.split(','):
-            hour.append(hourComma)
+            if hourComma != "*":
+                hour.append(int(hourComma))
+            else:
+                hour.append("*")
     for dayHypen in cronSplit[0].split('-'):
         for dayComma in dayHypen.split(','):
-            day.append(dayComma)
+            if dayComma != "*":
+                day.append(int(dayComma))
+            else:
+                day.append("*")
     for monthHypen in cronSplit[0].split('-'):
         for monthComma in monthHypen.split(','):
-            month.append(monthComma)
+            if monthComma != "*":
+                month.append(int(monthComma))
+            else:
+                month.append("*")
     for weekDayHypen in cronSplit[0].split('-'):
         for weekDayComma in weekDayHypen.split(','):
-            weekDay.append(weekDayComma)
+            if weekDayComma != "*":
+                weekDay.append(int(weekDayComma))
+            else:
+                weekDay.append("*")
+    
 
-    for m in min:
-        if m not in range(0,61) and m != "*":
-            return 0
-    for h in hour:
-        if h not in range(0,24) and h != "*":
-            return 0
-    for d in day:
-        if d not in range(1,32) and d != "*":
-            return 0
-    for m in month:
-        if m not in range(1,13) and m != "*":
-            return 0
-    for wD in weekDay:
-        if wD not in range(0,7) and wD != "*":
-            return 0
+    if cronSplit[3] != "*" and cronSplit[2] != "*":
+        if len(cronSplit[3]) <= 2 and len(cronSplit[2]) <= 2:
+            if int(cronSplit[3]) == 2 and int(cronSplit[2]) > 29:
+                return 0
+    if month != "*" and day != "*":            
+        if len(month) == 1 and len(day) == 1:
+            if (int(cronSplit[3]) == 4 or int(cronSplit[3]) == 6 or int(cronSplit[3]) == 9 or int(cronSplit[3]) == 11) and int(cronSplit[2]) == 31:
+                return 0
     return 1
 
 
