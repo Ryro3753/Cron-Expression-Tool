@@ -16,10 +16,10 @@ daysNumber = ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th
 
 weekDays = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday']
 
-#past = ['quarter past', 'half past']
 
 
 def main():
+    print("Welcome to Cron Expression Tool, type -help in order to get details of this tool.\n")
     inp = inputCron()
     inp = inp.lower()
     copy = 0
@@ -27,6 +27,9 @@ def main():
         if item == "-copy":
             copy = 1
             inp = inp[6:]
+        if item == "-help":
+            help()
+            return 0
     DateNTime = nlpDateTime(inp)
     statement = statementCombiner(DateNTime)
     if(isCronValid(statement) == 0):
@@ -36,6 +39,15 @@ def main():
         copyToClipBoard(statement)
     print('Your CRON statement is: ' + statement)
     
+def help():
+"""Cron Expression Tool is a tool that converts the given text statement to a Cron Expression. 
+\nThe text should be written as a decent English sentence.
+\nYou will automatically be copying the output as you add the statement “-copy” before your text.
+\nSome Examples: The output of “23rd February at 10:00” is “00 10 23 2 *”.
+\nThe output of “10 May at between 10:00 to 16:30” is “00-30 10-16 10 5 *”.
+\nThe output of “Every Saturday at 19:45” is “45 19 * * 6”.
+\nThe output of “-copy Between 10th to 19th in July” is “* * 10-19 7 *”. 
+Additionally, the output will be copied to your clipboard."""
 
 def copyToClipBoard(s):
     cmd = 'echo ' + s.strip() + '|clip'
@@ -45,7 +57,7 @@ def inputCron():
     inp = input('Please write your text statement:')
     return inp
 
-def nlpDateTime(s):
+def nlpDateTime(s): 
     doc = nlp(s)
     DateNTime = []
     for item in doc.ents:
@@ -73,7 +85,7 @@ def getMonthAndDate(s):
 def getMonthIndex(m):
     return(months.index(m)+1)
 
-def ExtractWeekDay(dateList): ##Done
+def ExtractWeekDay(dateList): 
     datesContainsWeekDays = []
     for d in dateList:
         for w in weekDays:
@@ -98,7 +110,7 @@ def ExtractWeekDay(dateList): ##Done
         statement = statement[:-1]
     return statement
     
-def ExtractHour(dateList): ##Done
+def ExtractHour(dateList): 
     datesContainsHour = []
     for d in dateList:
         if ':' in d and d not in datesContainsHour:
@@ -122,7 +134,7 @@ def ExtractHour(dateList): ##Done
         statement = statement[:-1]
     return statement
        
-def ExtractMin(dateList): ##Done
+def ExtractMin(dateList): 
     datesContainsMin = []
     for d in dateList:
         if ':' in d and d not in datesContainsMin:
@@ -281,8 +293,6 @@ def isCronValid(cron):
                 weekDay.append(int(weekDayComma))
             else:
                 weekDay.append("*")
-    
-
     if cronSplit[3] != "*" and cronSplit[2] != "*":
         if len(cronSplit[3]) <= 2 and len(cronSplit[2]) <= 2:
             if int(cronSplit[3]) == 2 and int(cronSplit[2]) > 29:
@@ -297,5 +307,3 @@ def isCronValid(cron):
 
 if __name__ == '__main__':
     main()
-
-## İki ay aralığı için uğraş
