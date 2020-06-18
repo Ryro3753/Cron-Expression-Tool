@@ -39,24 +39,28 @@ def main():
         copyToClipBoard(statement)
     print('Your CRON statement is: ' + statement)
     
-def help():
-"""Cron Expression Tool is a tool that converts the given text statement to a Cron Expression. 
-\nThe text should be written as a decent English sentence.
-\nYou will automatically be copying the output as you add the statement “-copy” before your text.
-\nSome Examples: The output of “23rd February at 10:00” is “00 10 23 2 *”.
-\nThe output of “10 May at between 10:00 to 16:30” is “00-30 10-16 10 5 *”.
-\nThe output of “Every Saturday at 19:45” is “45 19 * * 6”.
-\nThe output of “-copy Between 10th to 19th in July” is “* * 10-19 7 *”. 
-Additionally, the output will be copied to your clipboard."""
+#function that print out help
+def help(): 
+    return """Cron Expression Tool is a tool that converts the given text statement to a Cron Expression. 
+    \nThe text should be written as a decent English sentence.
+    \nYou will automatically be copying the output as you add the statement “-copy” before your text.
+    \nSome Examples: The output of “23rd February at 10:00” is “00 10 23 2 *”.
+    \nThe output of “10 May at between 10:00 to 16:30” is “00-30 10-16 10 5 *”.
+    \nThe output of “Every Saturday at 19:45” is “45 19 * * 6”.
+    \nThe output of “-copy Between 10th to 19th in July” is “* * 10-19 7 *”. 
+    Additionally, the output will be copied to your clipboard."""
 
+#function that copy the statement to clipboard of the user
 def copyToClipBoard(s):
     cmd = 'echo ' + s.strip() + '|clip'
     return subprocess.check_call(cmd,shell=True)
 
+#function that request input from user
 def inputCron():
     inp = input('Please write your text statement:')
     return inp
 
+#function that parse the text by DATE and TIME label
 def nlpDateTime(s): 
     doc = nlp(s)
     DateNTime = []
@@ -65,6 +69,7 @@ def nlpDateTime(s):
             DateNTime.append(str(item))
     return DateNTime
 
+#function that get month from month List
 def getMonth(s):
     for item in s:
         if item in months:
@@ -82,9 +87,11 @@ def getMonthAndDate(s):
 
     return (month, day)
 
+#function that get month index for example December = 12, May = 5
 def getMonthIndex(m):
     return(months.index(m)+1)
 
+#function that extract weekDays statements from text like "Tuesday"
 def ExtractWeekDay(dateList): 
     datesContainsWeekDays = []
     for d in dateList:
@@ -110,6 +117,7 @@ def ExtractWeekDay(dateList):
         statement = statement[:-1]
     return statement
     
+#function that finds hours from text statement
 def ExtractHour(dateList): 
     datesContainsHour = []
     for d in dateList:
@@ -134,6 +142,7 @@ def ExtractHour(dateList):
         statement = statement[:-1]
     return statement
        
+#function that finds mins from text statement
 def ExtractMin(dateList): 
     datesContainsMin = []
     for d in dateList:
@@ -158,6 +167,7 @@ def ExtractMin(dateList):
         statement = statement[:-1]
     return statement
 
+#function that finds month from text statements like "between January to August"
 def ExtractMonth(dateList): ##Done
     datesContainsMonts = []
     for d in dateList:
@@ -183,6 +193,7 @@ def ExtractMonth(dateList): ##Done
         statement = statement[:-1]
     return statement
 
+#function that finds days of the month in a text like "23rd or thirteenth"
 def ExtractDay(dateList): ## Done
     datesContainsDays = []
     for d in dateList:
@@ -214,12 +225,14 @@ def ExtractDay(dateList): ## Done
         statement = statement[:-1]
     return statement
 
+#function that combine list of string in a one string
 def combiner(strList):
     str = ''
     for v in strList:
         str = v + " "
     return str
 
+# function that divide a string into a list of string
 def divisor(strList):
     divided = []
     for v in strList:
@@ -227,6 +240,7 @@ def divisor(strList):
             divided.append(t)
     return divided
 
+# function that finds hour part in a time statement
 def colonDividerHour(str):
     space = str.split()
     hourPart = ""
@@ -236,6 +250,7 @@ def colonDividerHour(str):
             hourPart = temp[0]
     return hourPart
 
+#function that finds min part in a time statement
 def colonDividerMin(str):
     space = str.split()
     minPart = ""
@@ -244,6 +259,7 @@ def colonDividerMin(str):
             temp = t.split(':')
             minPart = temp[1]
     return minPart
+
 
 def statementCombiner(DateNTime):
     min = ExtractMin(DateNTime)
@@ -254,6 +270,7 @@ def statementCombiner(DateNTime):
     combine = str(min) + ' ' + str(hour) + ' ' + str(day) + ' ' + str(month) + ' ' + str(weekDay)
     return combine
 
+#function that check if Cron is Valid by some varius methods
 def isCronValid(cron):
     min = []
     hour = []
@@ -297,8 +314,8 @@ def isCronValid(cron):
         if len(cronSplit[3]) <= 2 and len(cronSplit[2]) <= 2:
             if int(cronSplit[3]) == 2 and int(cronSplit[2]) > 29:
                 return 0
-    if month != "*" and day != "*":            
-        if len(month) == 1 and len(day) == 1:
+    if cronSplit[3] != "*" and cronSplit[2] != "*":            
+        if len(cronSplit[3]) == 1 and len(cronSplit[2]) == 1:
             if (int(cronSplit[3]) == 4 or int(cronSplit[3]) == 6 or int(cronSplit[3]) == 9 or int(cronSplit[3]) == 11) and int(cronSplit[2]) == 31:
                 return 0
     return 1
